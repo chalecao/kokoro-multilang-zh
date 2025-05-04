@@ -4,7 +4,7 @@ Folders:
 
 Use example:
 ```html
-<script src="http://localhost/proyectos/pruebas/kokoro/out/kokoro-vite/dist/kokoro.umd.js"></script>
+<script src="dist/kokoro.umd.js"></script>
 <script>
   (async () => {
     const { KokoroTTS } = window.Kokoro;
