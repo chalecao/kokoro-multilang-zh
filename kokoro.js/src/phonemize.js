@@ -210,7 +210,7 @@ export async function phonemize(text, language = "a", norm = true) {
   } else if (language === "e") {
     lang = "es";
   } else if (language === "z") {
-    lang = "zh-cn";
+    lang = "zh";
   }
   const ps = (await Promise.all(sections.map(async ({ match, text }) => (match ? text : (await espeakRun(text, lang)))))).join("");
 
