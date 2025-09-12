@@ -1,6 +1,6 @@
 {
-  "name": "kokoro-js",
-  "version": "1.2.0",
+  "name": "kokoro-js-zh",
+  "version": "2.1.3",
   "type": "module",
   "exports": {
     "types": "./types/kokoro.d.ts",
@@ -23,18 +23,18 @@
     "text-to-speech"
   ],
   "author": {
-    "name": "hexgrad",
-    "email": "hello@hexgrad.com"
+    "name": "chalecao",
+    "email": "chh_exe@163.com"
   },
   "browser": {
     "path": false,
     "fs/promises": false
   },
   "contributors": [
-    "Xenova"
+    "Xenova", "chalecao"
   ],
   "license": "Apache-2.0",
-  "description": "High-quality text-to-speech for the web",
+  "description": "High-quality text-to-speech for the web, support Chinese, web播放文本到语音，支持中文语音.",
   "dependencies": {
     "@huggingface/transformers": "^3.3.3",
     "espeak-ng": "^1.0.2",
@@ -57,10 +57,10 @@
     "README.md",
     "LICENSE"
   ],
-  "homepage": "https://github.com/hexgrad/kokoro",
+  "homepage": "https://github.com/chalecao/kokoro-multilang-zh",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hexgrad/kokoro.git"
+    "url": "git+https://github.com/chalecao/kokoro-multilang-zh.git"
   },
   "publishConfig": {
     "access": "public"
