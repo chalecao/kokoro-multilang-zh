@@ -419,6 +419,7 @@ export const VOICES = Object.freeze({
 });
 
 const VOICE_DATA_URL = "https://huggingface.co/onnx-community/Kokoro-82M-v1.0-ONNX/resolve/main/voices";
+const LOCAL_VOICE_DATA_URL = "./voices";
 
 /**
  *
@@ -434,11 +435,12 @@ async function getVoiceFile(id) {
   }
 
   const url = `${VOICE_DATA_URL}/${id}.bin`;
+  const localUrl = `${LOCAL_VOICE_DATA_URL}/${id}.bin`;
 
   let cache;
   try {
     cache = await caches.open("kokoro-voices");
-    const cachedResponse = await cache.match(url);
+    const cachedResponse = await cache.match(id);
     if (cachedResponse) {
       return await cachedResponse.arrayBuffer();
     }
@@ -447,14 +449,14 @@ async function getVoiceFile(id) {
   }
 
   // No cache, or cache failed to open. Fetch the file.
-  const response = await fetch(url);
+  const response = await fetch(localUrl).catch(() => fetch(url));
   const buffer = await response.arrayBuffer();
 
   if (cache) {
     try {
       // NOTE: We use `new Response(buffer, ...)` instead of `response.clone()` to handle LFS files
       await cache.put(
-        url,
+        id,
         new Response(buffer, {
           headers: response.headers,
         }),
