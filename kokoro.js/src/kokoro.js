@@ -1,4 +1,4 @@
-import { StyleTextToSpeech2Model, AutoTokenizer, Tensor, RawAudio } from "@huggingface/transformers";
+import { StyleTextToSpeech2Model, AutoTokenizer, Tensor, RawAudio, env } from "@huggingface/transformers";
 import { phonemize } from "./phonemize.js";
 import { TextSplitterStream } from "./splitter.js";
 import { getVoiceData, VOICES } from "./voices.js";
@@ -35,10 +35,18 @@ export class KokoroTTS {
    * @param {Object} options Additional options
    * @param {"fp32"|"fp16"|"q8"|"q4"|"q4f16"} [options.dtype="fp32"] The data type to use.
    * @param {"wasm"|"webgpu"|"cpu"|null} [options.device=null] The device to run the model on.
+   * @param {Object} [options.envConfig] The environment configuration
    * @param {import("@huggingface/transformers").ProgressCallback} [options.progress_callback=null] A callback function that is called with progress information.
    * @returns {Promise<KokoroTTS>} The loaded model
    */
-  static async from_pretrained(model_id, { dtype = "fp32", device = null, progress_callback = null } = {}) {
+  static async from_pretrained(model_id, { dtype = "fp32", device = null, progress_callback = null, envConfig } = {}) {
+    if (envConfig) {
+      Object.keys(envConfig).forEach(key => {
+        if (env.hasOwnProperty(key)) {
+          env[key] = envConfig[key];
+        }
+      });
+    }
     const model = StyleTextToSpeech2Model.from_pretrained(model_id, { progress_callback, dtype, device });
     const tokenizer = AutoTokenizer.from_pretrained(model_id, { progress_callback });
 
@@ -56,9 +64,9 @@ export class KokoroTTS {
 
   _validate_voice(voice) {
     if (!VOICES.hasOwnProperty(voice)) {
-      console.error(`Voice "${voice}" not found. Available voices:`);
+      console.log(`Voice "${voice}" not found. Available voices:`);
       console.table(VOICES);
-      throw new Error(`Voice "${voice}" not found. Should be one of: ${Object.keys(VOICES).join(", ")}.`);
+      // throw new Error(`Voice "${voice}" not found. Should be one of: ${Object.keys(VOICES).join(", ")}.`);
     }
     const language = /** @type {"a"|"b"} */ (voice.at(0)); // "a" or "b"
     return language;
@@ -126,9 +134,9 @@ export class KokoroTTS {
       splitter = new TextSplitterStream();
       const chunks = split_pattern
         ? text
-            .split(split_pattern)
-            .map((chunk) => chunk.trim())
-            .filter((chunk) => chunk.length > 0)
+          .split(split_pattern)
+          .map((chunk) => chunk.trim())
+          .filter((chunk) => chunk.length > 0)
         : [text];
       splitter.push(...chunks);
     } else {
