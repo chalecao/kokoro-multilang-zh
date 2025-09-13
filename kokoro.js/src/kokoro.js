@@ -46,7 +46,11 @@ export class KokoroTTS {
           env[key] = envConfig[key];
         }
       });
+      if(envConfig.wasmPaths){
+        env.backends.onnx.wasm.wasmPaths = envConfig.wasmPaths;
+      }
     }
+    console.log("Transformers.js env:", env);
     const model = StyleTextToSpeech2Model.from_pretrained(model_id, { progress_callback, dtype, device });
     const tokenizer = AutoTokenizer.from_pretrained(model_id, { progress_callback });
 

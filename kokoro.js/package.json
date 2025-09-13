@@ -1,6 +1,6 @@
 {
   "name": "kokoro-js-zh",
-  "version": "2.1.3",
+  "version": "2.1.7",
   "type": "module",
   "exports": {
     "types": "./types/kokoro.d.ts",
